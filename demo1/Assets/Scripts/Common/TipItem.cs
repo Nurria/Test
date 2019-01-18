@@ -22,12 +22,10 @@ public class TipItem : MonoBehaviour {
             _showing = value;
             if (_showing)
             {
-                Debug.Log("show !!!");
                 Tip.Instance.ShowTip(type, transform.position + new Vector3(0, height, 0));
             }
             else
             {
-                Debug.Log("hide !!!");
                 Tip.Instance.HideTip();
             }
             

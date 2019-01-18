@@ -986,6 +986,7 @@ MonoBehaviour:
   methods:
   - CheckGround
   - ExtractWeapon
+  - CheckSeperate
 --- !u!114 &114990111588934720
 MonoBehaviour:
   m_ObjectHideFlags: 3
