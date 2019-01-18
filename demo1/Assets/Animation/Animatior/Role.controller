@@ -526,20 +526,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   monoBehaviour: {fileID: 0}
---- !u!114 &114436624882837294
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cd4eee2c41ec7fb45ae1dc2a481f5811, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  monoBehaviour: {fileID: 0}
-  methods:
-  - ExtractAfter
 --- !u!114 &114452984638704748
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -652,20 +638,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d14344c06ccc10b4da15d2423fed0542, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  monoBehaviour: {fileID: 0}
-  methods:
-  - CheckGround
---- !u!114 &114536405494247534
-MonoBehaviour:
-  m_ObjectHideFlags: 3
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b81743c147d946e459b165db378cd81d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   monoBehaviour: {fileID: 0}
@@ -881,20 +853,6 @@ MonoBehaviour:
   monoBehaviour: {fileID: 0}
   methods:
   - CheckGround
---- !u!114 &114783840726919556
-MonoBehaviour:
-  m_ObjectHideFlags: 3
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b81743c147d946e459b165db378cd81d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  monoBehaviour: {fileID: 0}
-  methods:
-  - CheckGround
 --- !u!114 &114794568885580960
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -975,20 +933,6 @@ MonoBehaviour:
   monoBehaviour: {fileID: 0}
   methods:
   - ExtractAfter
---- !u!114 &114894697680462200
-MonoBehaviour:
-  m_ObjectHideFlags: 3
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b81743c147d946e459b165db378cd81d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  monoBehaviour: {fileID: 0}
-  methods:
-  - CheckGround
 --- !u!114 &114910646832341070
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -4136,7 +4080,6 @@ AnimatorState:
   m_Transitions:
   - {fileID: 1101473042052749824}
   m_StateMachineBehaviours:
-  - {fileID: 114783840726919556}
   - {fileID: 114974070279939968}
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
@@ -4503,7 +4446,6 @@ AnimatorState:
   m_Transitions:
   - {fileID: 1101323207914769714}
   m_StateMachineBehaviours:
-  - {fileID: 114894697680462200}
   - {fileID: 114990111588934720}
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
@@ -5011,7 +4953,6 @@ AnimatorState:
   - {fileID: 1101577126296792714}
   m_StateMachineBehaviours:
   - {fileID: 114530621985499406}
-  - {fileID: 114436624882837294}
   - {fileID: 114878992014682778}
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
@@ -5156,7 +5097,6 @@ AnimatorState:
   m_Transitions:
   - {fileID: 1101285364169297088}
   m_StateMachineBehaviours:
-  - {fileID: 114536405494247534}
   - {fileID: 114295551397610118}
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0

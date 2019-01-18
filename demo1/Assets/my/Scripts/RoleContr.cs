@@ -560,7 +560,7 @@ public class RoleContr : MonoBehaviour
     {
         if (d_anim == null)
         {
-            if (isGround && !tipItem.Showing && !isSeperated)
+            if (isGround && !tipItem.Showing && !isSeperated && Mathf.Approximately(m_rigid.velocity.y, 0f))
             {
                 isSeperated = true;
                 MoveAndShow();
