@@ -5,6 +5,15 @@ using UnityEngine.UI;
 using Gamekit2D;
 using System;
 
+//public enum Tips
+//{
+//    Interact,
+//    Attack,
+//    Dash
+//}
+
+
+
 public class RoleContr : MonoBehaviour
 {
     [Header("-----------  Move  -----------")]
@@ -43,6 +52,9 @@ public class RoleContr : MonoBehaviour
     public CapsuleCollider2D capsuleColl;
     public PhysicsMaterial2D FZero;
     public HearyFall hearyFall;
+    public FinalKill finalKill;
+    public Transform sword;
+    public TipItem tipItem;
     private CharacterController2D m_characterController2D;
     private Animator m_anim;
     private Rigidbody2D m_rigid;
@@ -51,6 +63,8 @@ public class RoleContr : MonoBehaviour
     private bool isJump = false;
     private bool isAttack = false;
     private bool isSit = false;
+    private bool interact = false;
+    private bool isSeperated = false;
     private int attackInt = 0;
     
     [Header("-----------  Naili  -----------")]
@@ -66,7 +80,23 @@ public class RoleContr : MonoBehaviour
     private int m_AttatckState = Animator.StringToHash("attackInt");
     private int m_AttatckTriggerState = Animator.StringToHash("attack");
     private int m_HearyFallTriggerState = Animator.StringToHash("hearyFall");
+    private int m_ExtractTriggerState = Animator.StringToHash("extract");
+    private int m_SeperateTriggerState = Animator.StringToHash("seperate");
 
+    [HideInInspector]
+    public enum AnimState
+    {
+        None,
+        LocoMotion,
+        LocoMotion_NW
+    }
+
+    private GameObject seperatedSword;
+    private AnimState _currentAnimState = AnimState.None;
+    private Animator d_anim;
+    public bool Interact() { return interact; }
+    public bool Seperating() { return isSeperated; }
+    public bool LockInput { get; set; }
 
     // Use this for initialization
     void Awake()
@@ -77,23 +107,27 @@ public class RoleContr : MonoBehaviour
     void Start()
     {
         ResetJumpForceCount();
+        SetSword();
     }
 
     private void Update()
     {
+        if (LockInput)
+            return; 
+
         GetDashInput();
         GetSitInput();
         GetAttackInput();
+        GetInteractInput();
+        GetHorizontalInput();
     }
 
     void FixedUpdate()
     {
         Move();
         CtrlNailiValue();
-
         //Attack();             //用AttackInt
         AttackByTrigger();      //用SetTrigger
-
         SetAnimValue();
     }
 
@@ -154,7 +188,7 @@ public class RoleContr : MonoBehaviour
         }
     }
 
-    #region 使用AttackInt做的attack
+    #region 使用AttackInt做的attack(弃用)
     private void Attack()
     {
         if (!isAttack)
@@ -212,11 +246,6 @@ public class RoleContr : MonoBehaviour
     }
     #endregion
 
-    private void TriggerHearyFall()
-    {
-        m_anim.SetTrigger(m_HearyFallTriggerState);
-    }
-
     #region 碰撞的回调检测是否接触地面(弃用)
     //private void OnCollisionEnter2D(Collision2D collision)
     //{
@@ -254,9 +283,13 @@ public class RoleContr : MonoBehaviour
         //{
         //    isAttack = false;
         //}
-
-        ///测试代码
+        
         isAttack = Input.GetKeyDown(KeyCode.J) ? true : false;
+    }
+
+    private void GetInteractInput()
+    {
+        interact = Input.GetKeyDown(KeyCode.E) ? true : false;
     }
 
     private void GetSitInput()
@@ -297,6 +330,11 @@ public class RoleContr : MonoBehaviour
         m_anim.SetBool(m_IsJumpState, isJump);
         return isJump;
     }
+
+    private void GetHorizontalInput()
+    {
+        m_Horizontal = Input.GetAxisRaw("Horizontal");
+    }
     #endregion
 
     #region SMB调用的接口
@@ -315,7 +353,7 @@ public class RoleContr : MonoBehaviour
                 smbs[i].monoBehaviour = this;
             }
         }
-        catch (System.Exception e)
+        catch (Exception e)
         {
             throw e;
         }
@@ -323,6 +361,21 @@ public class RoleContr : MonoBehaviour
         //damager = GetComponent<Damager>();
         m_rigid = GetComponent<Rigidbody2D>();
         m_characterController2D = GetComponent<CharacterController2D>();
+    }
+
+    public void SetSword()
+    {
+        var weapon = FindObjectOfType<Sword>();
+        if (weapon == null)
+        {
+            seperatedSword = Instantiate(Resources.Load("Prefabs/sword") as GameObject);
+        }
+        else
+        {
+            seperatedSword = weapon.gameObject;
+        }
+        seperatedSword.GetComponent<InteractOnButton2D>().OnButtonPress.AddListener(ExtractWeapon);
+        tipItem = seperatedSword.GetComponent<TipItem>();
     }
 
     public void Jump()
@@ -348,8 +401,7 @@ public class RoleContr : MonoBehaviour
     
     public void CheckFace()
     {
-        m_Horizontal = Input.GetAxisRaw("Horizontal");
-
+        //GetHorizontalInput();
         dir = transform.localScale;
         if (m_Horizontal > 0)
         {
@@ -456,5 +508,139 @@ public class RoleContr : MonoBehaviour
     {
         m_rigid.velocity = Vector2.zero;
     }
+
+    public void EnableChopdownDamage()
+    {
+        damager.EnableDamage();
+    }
+
+    public void DisableChopdownDamager()
+    {
+        damager.DisableDamage();
+    }
+
+    public void EnableFinalKillDamage()
+    {
+        finalKill.EnableDamage();
+    }
+
+    public void DisableFinalKillDamage()
+    {
+        finalKill.DisableDamage();
+    }
+
+    public void ExtractWeapon()
+    {
+        if (!isSeperated || !tipItem.Showing)
+            return;
+
+        if (interact)
+        {
+            tipItem.Showing = false;
+            if (seperatedSword.activeSelf)
+            {
+                sword.position = seperatedSword.transform.position;
+                seperatedSword.SetActive(false);
+                sword.gameObject.SetActive(true);
+            }
+            m_anim.SetTrigger(m_ExtractTriggerState);
+        }
+    }
+
+    public void ExtractAfter()
+    {
+        if (d_anim != null)
+        {
+            d_anim = null;
+        }
+        isSeperated = false;
+    }
+
+    public void CheckSeperate()
+    {
+        if (d_anim == null)
+        {
+            if (isGround && !tipItem.Showing && !isSeperated)
+            {
+                isSeperated = true;
+                MoveAndShow();
+            }
+        }
+        else
+        {
+            if (isSeperated)
+            {
+                Seperate();
+                return;
+            }
+
+            if (!d_anim.GetCurrentAnimatorStateInfo(0).IsName("die"))   //normalizedTime: 范围0 -- 1,  0是动作开始，1是动作结束    
+                return;
+            if (!(d_anim.GetCurrentAnimatorStateInfo(0).normalizedTime > 1.0f))
+                return;
+
+            MoveAndShow();
+            isSeperated = true;
+        }
+
+    }
+
+    public void SetAnimState(AnimState newState)
+    {
+        if (newState == _currentAnimState)
+            return;
+
+        _currentAnimState = newState;
+    }
     #endregion
+
+    private void TriggerHearyFall()
+    {
+        m_anim.SetTrigger(m_HearyFallTriggerState);
+    }
+
+    private void TriggerWeaponSeperate()
+    {
+        m_anim.SetTrigger(m_SeperateTriggerState);
+    }
+
+    private void Seperate()
+    {
+        if (seperatedSword.activeSelf)
+            return;
+
+        //主动攻击、被攻击或者移动都会自动分离
+        if (m_Horizontal > 0.1f || m_Horizontal < -0.1f || isAttack)
+        {
+            m_anim.ResetTrigger(m_AttatckTriggerState);
+            seperatedSword.SetActive(true);
+            sword.gameObject.SetActive(false);
+            TriggerWeaponSeperate();
+            //LockInput = true;
+        }
+
+    }
+
+    public void MoveToSword()
+    {
+        seperatedSword.transform.position = sword.position;
+        seperatedSword.transform.eulerAngles = sword.eulerAngles;
+    }
+
+    public void CatchDamageableAnim(FinalKill finalKill, Damageable damageable)
+    {
+        if (damageable.CurrentHealth > 0)
+        {
+            d_anim = damageable.GetComponent<Animator>();
+        }
+    }
+
+    public void MoveAndShow()
+    {
+        if (tipItem != null && !tipItem.Showing)
+        {
+            MoveToSword();
+            tipItem.Showing = true;
+        }
+    }
 }

@@ -7,6 +7,7 @@ public class LocoMotionSMB : stickManBase{
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         monoBehaviour.CancelJumpSignal();
+        monoBehaviour.SetAnimState(monoBehaviour.Seperating()? RoleContr.AnimState.LocoMotion_NW : RoleContr.AnimState.LocoMotion);
     }
 
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks

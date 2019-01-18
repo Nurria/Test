@@ -18,6 +18,10 @@ namespace Gamekit2D
         public class HealEvent : UnityEvent<int, Damageable>
         { }
 
+        [Serializable]
+        public class BeFinalKillEvent : UnityEvent<FinalKill, Damageable>
+        { }
+
         public int startingHealth = 5;
         public bool invulnerableAfterDamage = true;
         public float invulnerabilityDuration = 3f;
@@ -28,6 +32,7 @@ namespace Gamekit2D
         public DamageEvent OnTakeDamage;
         public DamageEvent OnDie;
         public HealEvent OnGainHealth;
+        public BeFinalKillEvent OnTakeFinalKillDamage;
         [HideInInspector]
         public DataSettings dataSettings;
 
@@ -153,6 +158,13 @@ namespace Gamekit2D
             Data<int, bool> healthData = (Data<int, bool>)data;
             m_CurrentHealth = healthData.value1 ? startingHealth : healthData.value0;
             OnHealthSet.Invoke(this);
+        }
+
+        public void TakeFinalKill(FinalKill finalKill)
+        {
+            m_CurrentHealth -= finalKill.damage;
+            OnHealthSet.Invoke(this);
+            OnTakeFinalKillDamage.Invoke(finalKill, this);
         }
 
 

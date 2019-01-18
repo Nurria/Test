@@ -45,9 +45,15 @@ TagManager:
   - name: BackGround
     uniqueID: 1180778079
     locked: 0
+  - name: Emeny
+    uniqueID: 123604169
+    locked: 0
   - name: Player
     uniqueID: 1477756165
     locked: 0
   - name: ForeGround
     uniqueID: 1336969287
+    locked: 0
+  - name: Tip
+    uniqueID: 345009581
     locked: 0
