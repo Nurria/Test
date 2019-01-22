@@ -94,6 +94,7 @@ public class RoleContr : MonoBehaviour
     private GameObject seperatedSword;
     private AnimState _currentAnimState = AnimState.None;
     private Animator d_anim;
+    private IEnumerator m_CheckStatic = null;
     public bool Interact() { return interact; }
     public bool Seperating() { return isSeperated; }
     public bool LockInput { get; set; }
@@ -562,8 +563,15 @@ public class RoleContr : MonoBehaviour
         {
             if (isGround && !tipItem.Showing && !isSeperated && Mathf.Approximately(m_rigid.velocity.y, 0f))
             {
-                isSeperated = true;
-                MoveAndShow();
+                if (m_CheckStatic == null)
+                {
+                    m_CheckStatic = CheckStatic(0.3f);
+                    StartCoroutine(m_CheckStatic);
+                }
+            }else if (m_CheckStatic != null)
+            {
+                StopCoroutine(m_CheckStatic);
+                m_CheckStatic = null;
             }
         }
         else
@@ -619,6 +627,14 @@ public class RoleContr : MonoBehaviour
             //LockInput = true;
         }
 
+    }
+
+    private IEnumerator CheckStatic(float second)
+    {
+        yield return new WaitForSeconds(second);
+        isSeperated = true;
+        MoveAndShow();
+        m_CheckStatic = null;
     }
 
     public void MoveToSword()
