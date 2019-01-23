@@ -54,7 +54,8 @@ public class RoleContr : MonoBehaviour
     public HearyFall hearyFall;
     public FinalKill finalKill;
     public Transform sword;
-    public TipItem tipItem;
+    public CharacterController2D Charter2D;
+    private TipItem tipItem;
     private CharacterController2D m_characterController2D;
     private Animator m_anim;
     private Rigidbody2D m_rigid;
@@ -402,8 +403,11 @@ public class RoleContr : MonoBehaviour
     
     public void CheckFace()
     {
-        //GetHorizontalInput();
+        if ((dir.x > 0 && m_Horizontal > 0) || (dir.x < 0 && m_Horizontal < 0))
+            return;
+
         dir = transform.localScale;
+        //dir.x = m_Horizontal > 1 ? 1 : -1;
         if (m_Horizontal > 0)
         {
             dir.x = 1;
@@ -541,6 +545,7 @@ public class RoleContr : MonoBehaviour
             if (seperatedSword.activeSelf)
             {
                 sword.position = seperatedSword.transform.position;
+                SetPosWhenExtract();
                 seperatedSword.SetActive(false);
                 sword.gameObject.SetActive(true);
             }
@@ -555,6 +560,7 @@ public class RoleContr : MonoBehaviour
             d_anim = null;
         }
         isSeperated = false;
+        LockInput = false;
     }
 
     public void CheckSeperate()
@@ -624,7 +630,6 @@ public class RoleContr : MonoBehaviour
             seperatedSword.SetActive(true);
             sword.gameObject.SetActive(false);
             TriggerWeaponSeperate();
-            //LockInput = true;
         }
 
     }
@@ -635,6 +640,25 @@ public class RoleContr : MonoBehaviour
         isSeperated = true;
         MoveAndShow();
         m_CheckStatic = null;
+    }
+
+    public void SetPosWhenExtract()
+    {
+        LockInput = true;
+        m_Horizontal = 0; //ReleaseMove();
+
+        float res = seperatedSword.transform.position.x - transform.position.x;
+        if (Charter2D.isUseScaleFlip)
+        {
+            dir = transform.localScale;
+            dir.x = res > 0 ? 1 : -1;
+            transform.localScale = dir;
+
+            transform.position = new Vector3(res > 0? seperatedSword.transform.position.x - 1.2f : seperatedSword.transform.position.x + 1.2f, transform.position.y, transform.position.z);
+        }else
+        {
+            Debug.Log("基于SpriteRenderer的旋转逻辑没写");
+        }
     }
 
     public void MoveToSword()

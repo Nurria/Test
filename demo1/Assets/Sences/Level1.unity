@@ -760,6 +760,11 @@ Prefab:
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 114184224229717246, guid: 16340cee57f719a43aa5cce028474052,
+        type: 2}
+      propertyPath: Charter2D
+      value: 
+      objectReference: {fileID: 1829486343}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 16340cee57f719a43aa5cce028474052, type: 2}
   m_IsPrefabParent: 0
@@ -2179,7 +2184,7 @@ MonoBehaviour:
   hearyFall: {fileID: 0}
   finalKill: {fileID: 0}
   sword: {fileID: 0}
-  tipItem: {fileID: 0}
+  Charter2D: {fileID: 0}
   nailiSlider: {fileID: 1095495499}
   nailiReduceRate: 30
   nailiMax: 100
@@ -4930,6 +4935,12 @@ GameObject:
   m_PrefabParentObject: {fileID: 1305141130456006, guid: 16340cee57f719a43aa5cce028474052,
     type: 2}
   m_PrefabInternal: {fileID: 157845540}
+--- !u!114 &1829486343 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 114874499695679798, guid: 16340cee57f719a43aa5cce028474052,
+    type: 2}
+  m_PrefabInternal: {fileID: 157845540}
+  m_Script: {fileID: 11500000, guid: f9630ef9434df4048aafe7bffcc5bc1a, type: 3}
 --- !u!4 &1829486344 stripped
 Transform:
   m_PrefabParentObject: {fileID: 4772571196645406, guid: 16340cee57f719a43aa5cce028474052,
