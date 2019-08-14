@@ -53,3 +53,4 @@ public class RedKnigtBehaviour : MonoBehaviour {
         effector2D.colliderMask |= layerMask;
     }
 }
+//testMerge
